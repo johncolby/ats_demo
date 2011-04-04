@@ -33,18 +33,16 @@ void setup() {
   FA         = new float[lines.length];
   for (int i=1; i < lines.length; i++) {
     String[] pieces = split(lines[i], '\t');
-    if (pieces.length == 6) {
-      streamline[i] = int(pieces[0]);
-      pt[i]         = int(pieces[1]);
-      x[i]          = float(pieces[2]);
-      y[i]          = float(pieces[3]);
-      z[i]          = float(pieces[4]);
-      FA[i]         = float(pieces[5]);
-      if (FA[i] > FAmax) {
-        FA[i] = FAmax;
-      } else if (FA[i] < FAmin) {
-        FA[i] = FAmin;
-      }
+    streamline[i] = int(pieces[0]);
+    pt[i]         = int(pieces[1]);
+    x[i]          = float(pieces[2]);
+    y[i]          = float(pieces[3]);
+    z[i]          = float(pieces[4]);
+    FA[i]         = float(pieces[5]);
+    if (FA[i] > FAmax) {
+      FA[i] = FAmax;
+    } else if (FA[i] < FAmin) {
+      FA[i] = FAmin;
     }
   }
   maxPt = max(pt);
@@ -56,10 +54,8 @@ void setup() {
   FA_SD  = new float[lines.length];
   for (int i=1; i < lines.length; i++) {
     String[] pieces = split(lines[i], '\t');
-    if (pieces.length == 6) {
-      meanFA[i] = float(pieces[4]);
-      FA_SD[i]  = float(pieces[5]);
-    }
+    meanFA[i] = float(pieces[4]);
+    FA_SD[i]  = float(pieces[5]);
   }
 
   // Load MATLAB color look-up table
@@ -69,11 +65,9 @@ void setup() {
   float[] lutB = new float[lines.length];
   for (int i=0; i < lines.length; i++) {
     String[] pieces = split(lines[i], ' ');
-    if (pieces.length == 10) {
-      lutR[i] = float(pieces[3]);
-      lutG[i] = float(pieces[6]);
-      lutB[i] = float(pieces[9]);
-    }
+    lutR[i] = float(pieces[3]);
+    lutG[i] = float(pieces[6]);
+    lutB[i] = float(pieces[9]);
   }
 
   // Resample color table
@@ -204,7 +198,6 @@ void draw() {
     textAlign(RIGHT, BOTTOM);
     if (showInfo == 1) {
       text(info, width, height);
-      textAlign(LEFT, BASELINE);
     } else if(showInfo == -1) {
       text("Press i for instructions", width, height);
     }
@@ -218,12 +211,12 @@ void draw() {
     translate(originx, height-originy);
   
     // Setup scale and draw box
-    int boxwidth = 200;
+    int boxwidth  = 200;
     int boxheight = 150;
-    float ymin = 0.1;
-    float ymax = 0.9;
-    float scaleX = boxwidth/(maxPt-1);
-    float scaleY = boxheight/abs(ymax-ymin);
+    float ymin    = 0.1;
+    float ymax    = 0.9;
+    float scaleX  = boxwidth/(maxPt-1);
+    float scaleY  = boxheight/abs(ymax-ymin);
     scale(scaleX, scaleY);
     fill(0, 0.2); stroke(0,0.2);
     rect(0, 0, maxPt-1, -(ymax-ymin)); 
