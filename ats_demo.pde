@@ -118,22 +118,35 @@ void draw() {
   // Setup background
   colorMode(RGB, 1);
   background(1);
+  rotateX(PI/2);
   
   // Plot slices
+  // (QUAD_STRIP needed to get correct perspective with P3D)
   if (plotSlices == 1) {
+    // Coronal
+    noStroke();
     pushMatrix();
-    imageMode(CENTER);
-    translate(0, 0, 1.25*(78-192/2-0.5));
-    image(coronal, 0, 0, 192*1.25, 55*2.5);
+    translate(-dim[0]/2, 1.25*(78-192/2-0.5), -dim[2]/2);
+    beginShape(QUAD_STRIP);
+    texture(coronal);
+    for (int i=0; i<=192; i++) {
+      vertex(1.25*i, 0, 0, i, 55);
+      vertex(1.25*i, 0, 2.5*55, i, 0);
+    }
+    endShape();
     popMatrix();
+    //Sagittal
     pushMatrix();
-    rotateY(-PI/2);
-    translate(1.25*(95-192/2-0.5), 0, 0);
-    image(sagittal, 0, 0, 192*1.25, 55*2.5);
+    translate(1.25*(95-192/2-0.5), -dim[1]/2, -dim[2]/2);
+    beginShape(QUAD_STRIP);
+    texture(sagittal);
+    for (int i=0; i<=192; i++) {
+      vertex(0, 1.25*i, 0, i, 55);
+      vertex(0, 1.25*i, 2.5*55, i, 0);
+    }
+    endShape();
     popMatrix();
   }
-  
-  rotateX(PI/2);
 
   // Draw box
   noFill();
@@ -228,6 +241,7 @@ void draw() {
     // Setup bottomleft
     int originx = 10;
     int originy = 10;
+    pushMatrix();
     translate(originx, height-originy);
   
     // Setup scale and draw box
@@ -237,7 +251,6 @@ void draw() {
     float ymax    = 0.9;
     float scaleX  = boxwidth/(maxPt-1);
     float scaleY  = boxheight/abs(ymax-ymin);
-    pushMatrix();
     scale(scaleX, scaleY);
     fill(0.75, 0.4); stroke(0.5,1);
     rect(0, 0, maxPt-1, -(ymax-ymin)); 
@@ -271,7 +284,7 @@ void draw() {
     
     // Display vertex #
     fill(0.25);
-    text("Vertex: " + zmark, 1, -1);
+    text("Vertex: " + zmark, originx+1, height-originy-1);
     
   cam.endHUD();
   
@@ -297,4 +310,3 @@ void keyReleased() {
     plotSlices = -plotSlices;
   }
 }
-
