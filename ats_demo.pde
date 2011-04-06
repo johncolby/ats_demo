@@ -6,7 +6,7 @@ PeasyCam cam;
 float[]  dim = {240, 240, 137.5};
 String[] lines;
 int[]    streamline, pt;
-int      maxPt, nSL;
+int      nSL, maxPt;
 float[]  x, y, z;
 float[]  FA, meanFA, FA_SD;
 float    FAmin = 0.1;
@@ -225,11 +225,9 @@ void draw() {
     }
     textAlign(LEFT, BASELINE);
   
-    // Setup bottomleft and display vertex #
-    stroke(0);
+    // Setup bottomleft
     int originx = 10;
     int originy = 10;
-    text("Vertex: " + zmark, originx+1, height-originy-1);
     translate(originx, height-originy);
   
     // Setup scale and draw box
@@ -239,8 +237,9 @@ void draw() {
     float ymax    = 0.9;
     float scaleX  = boxwidth/(maxPt-1);
     float scaleY  = boxheight/abs(ymax-ymin);
+    pushMatrix();
     scale(scaleX, scaleY);
-    fill(0, 0.2); stroke(0,0.2);
+    fill(0.75, 0.4); stroke(0.5,1);
     rect(0, 0, maxPt-1, -(ymax-ymin)); 
     noFill(); noStroke();
   
@@ -255,7 +254,7 @@ void draw() {
   
     // Add in confidence band
     noStroke(); 
-    fill(0, 0.15);
+    fill(0.5, 0.3);
     beginShape();
     for (int i=1; i<=maxPt; i++) {
       vertex(i-1, -(meanFA[i]+FA_SD[i]-ymin));
@@ -268,7 +267,12 @@ void draw() {
     // Vertical line to mark vertex #
     stroke(0); 
     line((zmark-1), 0, (zmark-1), -(ymax-ymin));
-    scale(1);
+    popMatrix();
+    
+    // Display vertex #
+    fill(0.25);
+    text("Vertex: " + zmark, 1, -1);
+    
   cam.endHUD();
   
     // Look for keypress
