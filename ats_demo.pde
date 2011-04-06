@@ -14,9 +14,11 @@ float    FAmax = 0.85;
 color[]  lut;
 PFont    font;
 int      zmark = 1;
-int      plotType = 1;
-int      showInfo = -1;
+int      plotType   = 1;
+int      showInfo   = -1;
+int      plotSlices = 1;
 String   info;
+PImage   coronal, sagittal;
 
 ////////////////////////////////////////////////////////////////////////////////
 void setup() {
@@ -88,6 +90,10 @@ void setup() {
     lut[i] = lerpColor(color(lutR[i1], lutG[i1], lutB[i1]),
     color(lutR[i2], lutG[i2], lutB[i2]), amt);
   }
+  
+  // Load slice images
+  coronal  = loadImage("coronal.jpg");
+  sagittal = loadImage("sagittal.jpg");
 
   // Load font
   font = loadFont("SansSerif-10.vlw");
@@ -98,6 +104,7 @@ void setup() {
     "Mouse: Control view (click-drag to rotate, scrollwheel or right-click-drag to zoom, double click to reset)\n" + 
     "Up/Down: Change selected collection of vertices along tract\n" + 
     "Space: Toggle view between FA and correspondence mode\n" + 
+    "b: Toggle brain slices\n" +
     "i: Toggle instructions";
 
   // Setup camera
@@ -111,6 +118,21 @@ void draw() {
   // Setup background
   colorMode(RGB, 1);
   background(1);
+  
+  // Plot slices
+  if (plotSlices == 1) {
+    pushMatrix();
+    imageMode(CENTER);
+    translate(0, 0, 1.25*(78-192/2-0.5));
+    image(coronal, 0, 0, 192*1.25, 55*2.5);
+    popMatrix();
+    pushMatrix();
+    rotateY(-PI/2);
+    translate(1.25*(95-192/2-0.5), 0, 0);
+    image(sagittal, 0, 0, 192*1.25, 55*2.5);
+    popMatrix();
+  }
+  
   rotateX(PI/2);
 
   // Draw box
@@ -266,6 +288,9 @@ void keyReleased() {
   }
   if (key == 'i') {
     showInfo = -showInfo;
+  }
+  if (key == 'b') {
+    plotSlices = -plotSlices;
   }
 }
 
